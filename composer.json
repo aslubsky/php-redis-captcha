@@ -1,0 +1,14 @@
+{
+    "name": "aslubsky/php-redis-captcha",
+    "description": "A simple PHP CAPTCHA generator, store code in redis and return base64 based image",
+    "version": "1.0.0",
+    "license": "MIT",
+    "autoload": {
+        "psr-0": {
+            "Captcha\\Generator": "src"
+        }
+    },
+    "require": {
+        "predis/predis": ">=1.0.1"
+    }
+}
