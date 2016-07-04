@@ -66,6 +66,7 @@ class Generator
     private $captchaConfig = [];
 
     private $redisConnect = null;
+    private $redisPrefix = 'captcha';
 
     private function _prepareConfig()
     {
@@ -110,8 +111,8 @@ class Generator
 
     public function check()
     {
-        $key = $this->redisConnect->get($this->captchaConfig['key']);
-        if($key) {
+        $key = $this->redisConnect->get($this->redisPrefix . '-' . $this->captchaConfig['key']);
+        if ($key) {
             return $key == $this->captchaConfig['code'];
         }
         return false;
@@ -119,7 +120,7 @@ class Generator
 
     public function generate()
     {
-        $this->redisConnect->set($this->captchaConfig['key'], $this->captchaConfig['code']);
+        $this->redisConnect->set($this->redisPrefix . '-' . $this->captchaConfig['key'], $this->captchaConfig['code']);
 
         // Pick random background, get info, and start captcha
         $background = $this->captchaConfig['backgrounds'][mt_rand(0, count($this->captchaConfig['backgrounds']) - 1)];
@@ -160,15 +161,13 @@ class Generator
         }
         // Draw text
         imagettftext($captcha, $fontSize, $angle, $textPosX, $textPosY, $color, $font, $this->captchaConfig['code']);
-        // Output image
-//        header("Content-type: image/png");
 
         ob_start();
         imagepng($captcha);
         $imageData = ob_get_contents();
         ob_end_clean();
 
-        return base64_encode($imageData);
+        return 'data:image/png;base64,' . base64_encode($imageData);
     }
 
     public function __construct($config = [])
@@ -181,8 +180,8 @@ class Generator
 
         $this->redisConnect = new \Predis\Client([
             'scheme' => 'tcp',
-            'host' => $config['redis']['server'],
-            'port' => $config['redis']['port']
+            'host' => $this->captchaConfig['redis']['server'],
+            'port' => $this->captchaConfig['redis']['port']
         ]);
     }
 }
