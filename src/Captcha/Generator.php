@@ -144,6 +144,7 @@ class Generator
         $boxHeight = abs($textBoxSize[5] - $textBoxSize[1]);
         $textPosXMin = 0;
         $textPosXMax = ($bgWidth) - ($boxWidth);
+        $textPosXMax = $textPosXMax < 0 ? 0 : $textPosXMax;
         $textPosX = mt_rand($textPosXMin, $textPosXMax);
         $textPosYMin = $boxHeight;
         $textPosYMax = ($bgHeight) - ($boxHeight / 2);
@@ -155,9 +156,9 @@ class Generator
         $textPosY = mt_rand($textPosYMin, $textPosYMax);
         // Draw shadow
         if ($this->captchaConfig['shadow']) {
-            $shadow_color = hex2rgb($this->captchaConfig['shadow_color']);
-            $shadow_color = imagecolorallocate($captcha, $shadow_color['r'], $shadow_color['g'], $shadow_color['b']);
-            imagettftext($captcha, $fontSize, $angle, $textPosX + $this->captchaConfig['shadow_offset_x'], $textPosY + $this->captchaConfig['shadow_offset_y'], $shadow_color, $font, $this->captchaConfig['code']);
+            $shadowColor = hex2rgb($this->captchaConfig['shadow_color']);
+            $shadowColor = imagecolorallocate($captcha, $shadowColor['r'], $shadowColor['g'], $shadowColor['b']);
+            imagettftext($captcha, $fontSize, $angle, $textPosX + $this->captchaConfig['shadow_offset_x'], $textPosY + $this->captchaConfig['shadow_offset_y'], $shadowColor, $font, $this->captchaConfig['code']);
         }
         // Draw text
         imagettftext($captcha, $fontSize, $angle, $textPosX, $textPosY, $color, $font, $this->captchaConfig['code']);
