@@ -34,34 +34,7 @@ define('CAPTCHA_FONTS_PATH', __DIR__ . '/../../fonts/');
 
 class Generator
 {
-    public static $defaultConfig = [
-        'code' => '',
-        'min_length' => 5,
-        'max_length' => 5,
-        'backgrounds' => [
-            CAPTCHA_BG_PATH . '45-degree-fabric.png',
-            CAPTCHA_BG_PATH . 'cloth-alike.png',
-            CAPTCHA_BG_PATH . 'grey-sandbag.png',
-            CAPTCHA_BG_PATH . 'kinda-jean.png',
-            CAPTCHA_BG_PATH . 'polyester-lite.png',
-            CAPTCHA_BG_PATH . 'stitched-wool.png',
-            CAPTCHA_BG_PATH . 'white-carbon.png',
-            CAPTCHA_BG_PATH . 'white-wave.png'
-        ],
-        'fonts' => [
-            CAPTCHA_FONTS_PATH . 'times_new_yorker.ttf'
-        ],
-        'characters' => 'ABCDEFGHJKLMNPRSTUVWXYZabcdefghjkmnprstuvwxyz23456789',
-        'min_font_size' => 28,
-        'max_font_size' => 28,
-        'color' => '#666',
-        'angle_min' => 0,
-        'angle_max' => 10,
-        'shadow' => true,
-        'shadow_color' => '#fff',
-        'shadow_offset_x' => -1,
-        'shadow_offset_y' => 1
-    ];
+    public static $defaultConfig = null;
 
     private $captchaConfig = [];
 
@@ -172,6 +145,36 @@ class Generator
 
     public function __construct($config = [])
     {
+        if(self::$defaultConfig === null) {
+            self::$defaultConfig = [
+                'code' => '',
+                'min_length' => 5,
+                'max_length' => 5,
+                'backgrounds' => [
+                    CAPTCHA_BG_PATH . '45-degree-fabric.png',
+                    CAPTCHA_BG_PATH . 'cloth-alike.png',
+                    CAPTCHA_BG_PATH . 'grey-sandbag.png',
+                    CAPTCHA_BG_PATH . 'kinda-jean.png',
+                    CAPTCHA_BG_PATH . 'polyester-lite.png',
+                    CAPTCHA_BG_PATH . 'stitched-wool.png',
+                    CAPTCHA_BG_PATH . 'white-carbon.png',
+                    CAPTCHA_BG_PATH . 'white-wave.png'
+                ],
+                'fonts' => [
+                    CAPTCHA_FONTS_PATH . 'times_new_yorker.ttf'
+                ],
+                'characters' => 'ABCDEFGHJKLMNPRSTUVWXYZabcdefghjkmnprstuvwxyz23456789',
+                'min_font_size' => 28,
+                'max_font_size' => 28,
+                'color' => '#666',
+                'angle_min' => 0,
+                'angle_max' => 10,
+                'shadow' => true,
+                'shadow_color' => '#fff',
+                'shadow_offset_x' => -1,
+                'shadow_offset_y' => 1
+            ];
+        }
         $this->captchaConfig = self::$defaultConfig;
         foreach ($config as $key => $value) {
             $this->captchaConfig[$key] = $value;
