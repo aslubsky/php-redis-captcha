@@ -182,10 +182,21 @@ class Generator
         }
         $this->_prepareConfig();
 
-        $this->redisConnect = new \Predis\Client([
-            'scheme' => 'tcp',
-            'host' => $this->captchaConfig['redis']['server'],
-            'port' => $this->captchaConfig['redis']['port']
-        ]);
+
+        $options = [];
+        if (isset($this->captchaConfig['redis']['cluster']) && $this->captchaConfig['redis']['cluster']) {
+            $options['cluster'] = $this->captchaConfig['redis']['cluster'];
+            $parameters = [
+                'tcp://' . $this->captchaConfig['redis']['server'] . ':' . $this->captchaConfig['redis']['port']
+            ];
+        } else {
+            $parameters = [
+                'scheme' => 'tcp',
+                'host' => $this->captchaConfig['redis']['server'],
+                'port' => $this->captchaConfig['redis']['port']
+            ];
+        }
+
+        $this->redisConnect = new \Predis\Client($parameters, $options);
     }
 }
